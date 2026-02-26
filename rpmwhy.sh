@@ -37,10 +37,9 @@ if [[ -n $files ]]
 then
     for f in $files
     do
-        fileowners+="$(rpm -q --qf %{NAME} -f $f) "
+        fileowners+="$(rpm -q --qf '%{NAME}\n' -f $f)"
     done
 fi
-
 
 for capability in $files $fileowners $@
 do
@@ -75,15 +74,6 @@ do
         echo "$capability recommended-by $rpmname"
     done
 
-    ## [bug] eg 'rpmwhy glibc-langpack-en'
-    $thissupplementswhat && for supplements in $(rpm -q --supplements $capability)
-    do
-        [[ $? == 0 ]] || break
-        rpmname=$(nevra2name $supplements)
-        [[ $rpmname == $capability ]] && break
-        echo "$capability supplements $rpmname"
-    done
-
     $whatsuggeststhis && for suggestedby in $(rpm -q --whatsuggests $capability)
     do
         [[ $? == 0 ]] || break
@@ -92,13 +82,21 @@ do
         echo "$capability suggested-by $rpmname"
     done
 
-    $thisenhanceswhat && for enhances in $(rpm -q --enhances $capability)
-    do
-        [[ $? == 0 ]] || break
-        rpmname=$(nevra2name $enhances)
-        [[ $rpmname == $capability ]] && break
-        echo "$capability enhances $rpmname"
-    done
+    ## RPM WEAK REVERSE DEPENDENCIES
+    (
+        IFS=$'\n'
+        $thissupplementswhat && for supplements in $(rpm -q --supplements $capability)
+        do
+            [[ $? == 0 ]] || break
+            echo "$capability supplements $supplements"
+        done
+
+        $thisenhanceswhat && for enhances in $(rpm -q --enhances $capability)
+        do
+            [[ $? == 0 ]] || break
+            echo "$capability enhances $enhances"
+        done
+    )
 done
 
 ################################################################################
