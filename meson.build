@@ -158,6 +158,7 @@ rpmwhy_bash = configure_file(
   install       : true,
   install_dir   : configx.get('bindir'),
   install_mode  : 'rwxr-xr-x',
+  install_tag   : 'bin',
 )
 
 __pod2man = find_program(
@@ -180,4 +181,11 @@ rpmwhy_1 = custom_target(
   install     : true,
   install_dir : configx.get('mandir')/'man1',
   install_tag : 'man',
+)
+
+install_data(
+  'rpmwhy.bash-completion',
+  rename      : fs.name(rpmwhy_bash),
+  install_dir : dependency('bash-completion').get_variable('completionsdir'),
+  install_tag : 'bin',
 )
