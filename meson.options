@@ -6,7 +6,7 @@
 ## type: {string,boolean,combo,integer,feature} CAN expanded
 ## by 'configuration_data()'
 
-option('with-manpage',          type:'feature', description:'install manpage')
+option('with-manpages',         type:'feature', description:'install manpages')
 option('with-bash-completions', type:'feature', description:'install bash-completions')
 
 ################################################################################

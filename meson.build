@@ -163,7 +163,7 @@ rpmwhy_bash = configure_file(
 
 __pod2man = find_program(
   'pod2man',
-  required : get_option('with-manpage'),
+  required : get_option('with-manpages'),
   disabler : true,
 )
 
@@ -188,7 +188,6 @@ __bash_completion = dependency(
   required : get_option('with-bash-completions'),
   disabler : true,
 )
-
 
 install_data(
   'rpmwhy.bash-completion',
