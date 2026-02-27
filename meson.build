@@ -2,7 +2,7 @@
 
 project(
   'rpmwhy',
-  version: '1.0.1',
+  version: '1.0.2',
   default_options: [],
   license: 'Unlicense',
   #license_files: 'LICENSE',
