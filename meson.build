@@ -163,7 +163,7 @@ rpmwhy_bash = configure_file(
 
 __pod2man = find_program(
   'pod2man',
-  required : get_option('build-docs'),
+  required : get_option('with-manpage'),
   disabler : true,
 )
 

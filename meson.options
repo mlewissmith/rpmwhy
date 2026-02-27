@@ -6,7 +6,8 @@
 ## type: {string,boolean,combo,integer,feature} CAN expanded
 ## by 'configuration_data()'
 
-option('build-docs', type:'feature', description:'generate manpages')
+option('with-manpage',          type:'feature', description:'install manpage')
+option('with-bash-completions', type:'feature', description:'install bash-completions')
 
 ################################################################################
 ## NO USER SERVICABLE PARTS BELOW
