@@ -5,14 +5,14 @@ set -u
 # Recommends <=> Supplements
 # Suggests <=> Enhances
 
-opt_verbose=false
+opt_verbose=true
+QF="%{NAME}\n"
+
+function echoerr { echo "$@" >&2; }
 
 function _usage { pod2usage $0; }
 function _man { pod2usage --verbose 2 $0; }
-function rpmq { rpm --query --nodigest --nosignature "$@"; }
-function nevra2name { rpmq --queryformat "%{NAME}" $1; }
-
-function echoerr { echo "$@" >&2; }
+function rpmq { rpm --query --queryformat="$QF" --nodigest --nosignature "$@"; }
 
 function _rpmwhy {
     this=$1
@@ -21,18 +21,16 @@ function _rpmwhy {
     for requiredby in $(rpmq --whatrequires $this)
     do
         [[ $? == 0 ]] || break
-        that=$(nevra2name $requiredby)
-        echo "$this required-by $that"
+        echo "$this required-by $requiredby"
     done
 
     for recommendedby in $(rpmq --whatrecommends $this)
     do
         [[ $? == 0 ]] || break
-        that=$(nevra2name $recommendedby)
-        echo "$this recommended-by $that"
+        echo "$this recommended-by $recommendedby"
     done
 
-    for supplements in $(rpmq $this --supplements)
+    for supplements in $(QF="[%{SUPPLEMENTS}\n]" rpmq $this)
     do
         [[ $? == 0 ]] || break
         echo "$this supplements $supplements"
@@ -41,11 +39,10 @@ function _rpmwhy {
     for suggestedby in $(rpmq --whatsuggests $this)
     do
         [[ $? == 0 ]] || break
-        that=$(nevra2name $suggestedby)
-        echo "$this suggested-by $that"
+        echo "$this suggested-by $suggestedby"
     done
 
-    for enhances in $(rpmq $this --enhances)
+    for enhances in $(QF="[%{ENHANCES}\n]" rpmq $this)
     do
         [[ $? == 0 ]] || break
         echo "$this enhances $enhances"
@@ -55,6 +52,7 @@ function _rpmwhy {
 while getopts qvhH opt
 do
     case $opt in
+        q) opt_verbose=false ;;
         v) opt_verbose=true ;;
         h) _usage ; exit 0 ;;
         H) _man ; exit 0 ;;
@@ -65,29 +63,23 @@ shift $(($OPTIND - 1))
 
 for arg in "$@"
 do
-    for providedby in $(rpmq --whatprovides $arg)
-    do
-        [[ $? == 0 ]] || break
-        rpmname=$(nevra2name $providedby)
-        [[ $rpmname == $arg ]] || echo "$arg provided-by $rpmname"
-        if $opt_verbose
-        then
-            for provided in $(rpmq $rpmname --queryformat "[%{PROVIDES}\n]")
+    _rpmwhy $arg
+    if $opt_verbose
+    then
+        for providedby in $(rpmq --whatprovides $arg)
+        do
+            [[ $? == 0 ]] || break
+            [[ $arg == $providedby ]] ||
+                echo "$arg provided-by $providedby"
+            for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
             do
-                [[ $provided == $arg ]] || echo "$arg provides $provided"
-                _rpmwhy $provided
+                [[ $providedby == $provided ]] ||
+                    echo "$providedby provides $provided"
+                [[ $provided == $arg ]] ||
+                    _rpmwhy $provided
             done
-        else
-            _rpmwhy $arg
-        fi
-    done
-
-    for obsoleted in $(rpmq $arg --queryformat "[%{OBSOLETES}\n]")
-    do
-        [[ $? == 0 ]] || break
-        echo "$arg obsoletes $obsoleted"
-        _rpmwhy $obsoleted
-    done
+        done
+    fi
 done
 
 ################################################################################
@@ -102,7 +94,7 @@ rpmwhy - Why is a given package on my system?
 
 =head1 SYNOPSIS
 
-B<rpmwhy> [B<-v>] I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
+B<rpmwhy> [B<-q>|B<-v>] I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
 
 B<rpmwhy> B<-h>|B<-H>
 
@@ -114,9 +106,13 @@ B<rpmwhy> is a wrapper around B<rpm -q --what{requires,recommends}>.
 
 =over 4
 
+=item B<-q>
+
+Quiet
+
 =item B<-v>
 
-Verbose.
+Verbose
 
 =item B<-h>
 
