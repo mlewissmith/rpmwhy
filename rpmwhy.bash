@@ -5,7 +5,6 @@ set -u
 # Recommends <=> Supplements
 # Suggests <=> Enhances
 
-opt_verbose=true
 QF="%{NAME}\n"
 
 function echoerr { echo "$@" >&2; }
@@ -52,8 +51,6 @@ function _rpmwhy {
 while getopts qvhH opt
 do
     case $opt in
-        q) opt_verbose=false ;;
-        v) opt_verbose=true ;;
         h) _usage ; exit 0 ;;
         H) _man ; exit 0 ;;
         *) _usage ; exit 1 ;;
@@ -64,22 +61,19 @@ shift $(($OPTIND - 1))
 for arg in "$@"
 do
     _rpmwhy $arg
-    if $opt_verbose
-    then
-        for providedby in $(rpmq --whatprovides $arg)
+    for providedby in $(rpmq --whatprovides $arg)
+    do
+        [[ $? == 0 ]] || break
+        [[ $arg == $providedby ]] ||
+            echo "$arg provided-by $providedby"
+        for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
         do
-            [[ $? == 0 ]] || break
-            [[ $arg == $providedby ]] ||
-                echo "$arg provided-by $providedby"
-            for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
-            do
-                [[ $providedby == $provided ]] ||
-                    echo "$providedby provides $provided"
-                [[ $provided == $arg ]] ||
-                    _rpmwhy $provided
-            done
+            [[ $providedby == $provided ]] ||
+                echo "$providedby provides $provided"
+            [[ $provided == $arg ]] ||
+                _rpmwhy $provided
         done
-    fi
+    done
 done
 
 ################################################################################
@@ -94,7 +88,7 @@ rpmwhy - Why is a given package on my system?
 
 =head1 SYNOPSIS
 
-B<rpmwhy> [B<-q>|B<-v>] I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
+B<rpmwhy> I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
 
 B<rpmwhy> B<-h>|B<-H>
 
@@ -105,14 +99,6 @@ B<rpmwhy> is a wrapper around B<rpm -q --what{requires,recommends}>.
 =head1 OPTIONS
 
 =over 4
-
-=item B<-q>
-
-Quiet
-
-=item B<-v>
-
-Verbose
 
 =item B<-h>
 
