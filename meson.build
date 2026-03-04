@@ -2,7 +2,7 @@
 
 project(
   'rpmquerytools',
-  version: '1.1.0',
+  version: '1.1.1',
   default_options: [],
   license: 'Unlicense',
   #license_files: 'LICENSE',
