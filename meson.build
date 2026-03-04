@@ -153,7 +153,19 @@ subdir('.meta')
 
 fs = import('fs')
 
-rpmwhy_bash = configure_file(
+__pod2man = find_program(
+  'pod2man',
+  required : get_option('with-manpages'),
+  disabler : true,
+)
+
+__pod2html = find_program(
+  'pod2html',
+  required : get_option('with-manpages'),
+  disabler : true,
+)
+
+__rpmwhy = configure_file(
   input         : 'rpmwhy.bash',
   output        : 'rpmwhy',
   configuration : configx,
@@ -163,15 +175,9 @@ rpmwhy_bash = configure_file(
   install_tag   : 'bin',
 )
 
-__pod2man = find_program(
-  'pod2man',
-  required : get_option('with-manpages'),
-  disabler : true,
-)
-
-rpmwhy_1 = custom_target(
-  input       : rpmwhy_bash,
-  output      : fs.name(rpmwhy_bash) + '.1',
+custom_target(
+  input       : __rpmwhy,
+  output      : fs.name(__rpmwhy) + '.1',
   command     : [
     __pod2man,
     '--section', '1',
@@ -186,7 +192,21 @@ rpmwhy_1 = custom_target(
   install_tag : 'man',
 )
 
-__bash_completion = dependency(
+
+custom_target(
+  input       : __rpmwhy,
+  output      : fs.name(__rpmwhy) + '.1.html',
+  command     : [
+    __pod2html,
+    '--infile=@INPUT@',
+    '--outfile=@OUTPUT@',
+  ],
+  install     : true,
+  install_dir : configx.get('htmldir'),
+  install_tag : 'man',
+)
+
+_bash_completion = dependency(
   'bash-completion',
   required : get_option('with-bash-completions'),
   disabler : true,
@@ -194,13 +214,13 @@ __bash_completion = dependency(
 
 install_data(
   'rpmwhy.bash-completion',
-  rename      : fs.name(rpmwhy_bash),
-  install_dir : __bash_completion.get_variable('completionsdir'),
+  rename      : fs.name(__rpmwhy),
+  install_dir : _bash_completion.get_variable('completionsdir'),
   install_tag : 'bin',
 )
 
 
-rpmlsf_sh = configure_file(
+__rpmlsf = configure_file(
   input         : 'rpmlsf.sh',
   output        : 'rpmlsf',
   configuration : configx,
