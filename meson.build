@@ -175,8 +175,9 @@ rpmwhy_1 = custom_target(
   command     : [
     __pod2man,
     '--section', '1',
-    '--center', configx.get('PACKAGE_NAME'),
-    '--release', configx.get('PACKAGE_STRING'),
+    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--release', configx.get('PACKAGE_NAME'),
+    '--date', configx.get('PACKAGE_VERSION'),
     '@INPUT@',
     '@OUTPUT@',
   ],
