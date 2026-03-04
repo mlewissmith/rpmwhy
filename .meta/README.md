@@ -1,10 +1,9 @@
-# rpmquerytools
+# @PACKAGE_NAME@
 
-Tools to query installed package RPMs
+@PACKAGE_SUMMARY@
 
 ```
-rpmwhy - Why is a given package on my system?
-rpmlsf - List contents of rpm packages
+@PACKAGE_DESCRIPTION@
 ```
 
 ## Manifest

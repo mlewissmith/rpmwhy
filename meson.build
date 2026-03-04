@@ -2,7 +2,7 @@
 
 project(
   'rpmquerytools',
-  version: '1.1.0',
+  version: '1.1.1',
   default_options: [],
   license: 'Unlicense',
   #license_files: 'LICENSE',
@@ -13,6 +13,7 @@ _package_url         = 'https://github.com/mlewissmith/rpmquerytools'
 _package_summary     = 'Tools to query installed package RPMs'
 _package_description = '''
 rpmwhy - Why is a given package on my system?
+rpmlsf - List contents of rpm packages
 '''
 
 ################################################################################
@@ -146,6 +147,8 @@ summary({'datarootdir'       : configx.get('datarootdir'),
          'pkgsharedstatedir' : configx.get('pkgsharedstatedir')},
         section: 'Directory macros: autoconf compatibility')
 
+subdir('.meta')
+
 ################################################################################
 
 fs = import('fs')
@@ -193,4 +196,15 @@ install_data(
   rename      : fs.name(rpmwhy_bash),
   install_dir : __bash_completion.get_variable('completionsdir'),
   install_tag : 'bin',
+)
+
+
+rpmlsf_sh = configure_file(
+  input         : 'rpmlsf.sh',
+  output        : 'rpmlsf',
+  configuration : configx,
+  install       : true,
+  install_dir   : configx.get('bindir'),
+  install_mode  : 'rwxr-xr-x',
+  install_tag   : 'bin',
 )

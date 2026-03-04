@@ -1,0 +1,24 @@
+# @PACKAGE_NAME@
+
+* Canonical source
+  https://github.com/mlewissmith/rpmquerytools
+
+* Develop on branches per tool:
+  wip/rpmwhy - devel for 'rpmwhy' tool
+  wip/rpmlsf - devel for 'rpmlsf' tool
+  wip/meta - devel for buildconf metafiles:
+             README, COMPILING etc
+
+* Integrate branches via 'main' branch
+  merge 'wip/XXX' into 'main' (consider squashing)
+  merge 'main' into 'wip/YYY'
+  Don't merge directly from 'wip/XXX' to 'wip/YYY'
+
+* Release checklist
+  on 'main' branch
+  [ ] 'meson.build' version
+  [ ] 'meson.build' _package_summary
+  [ ] 'meson.build' _package_description
+  [ ] meson compile .meta
+  [ ] git changelog -x -t VERSION | git tag VERSION -F-
+  [ ] Create github release ; generate release notes

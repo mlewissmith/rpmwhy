@@ -1,0 +1,6 @@
+# @PACKAGE_NAME@
+
+meson setup BUILDDIR --reconfigure --wipe
+meson configure -C BUILDDIR
+meson compile -C BUILDDIR -v
+meson install -C BUILDDIR --destdir=DESTDIR
