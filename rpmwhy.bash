@@ -29,8 +29,9 @@ ANSI_BRIGHTWHITE="\e[97m"
 
 EMPH=${ANSI_BOLD}${ANSI_GREEN}
 
-function _usage { pod2usage $0; }
-function _man { pod2usage --verbose 2 $0; }
+function _usage0 { pod2usage --verbose 0 $0; }
+function _usage1 { pod2usage --verbose 1 $0; }
+function _usage2 { pod2usage --verbose 2 $0; }
 function vecho { [[ $VERBOSITY -ge 1 ]] && echo "$@"; }
 
 function rpmq { rpm --query --queryformat=${QF:-'%{NAME}\n'} --nodigest --nosignature "$@"; }
@@ -72,17 +73,33 @@ function _rpmwhy {
     # done
 }
 
-while getopts qvhH opt
+while getopts qvhH-: opt
 do
     case $opt in
         q) VERBOSITY=0 ;;
         v) ((VERBOSITY++)) ;;
-        h) _usage ; exit 0 ;;
-        H) _man ; exit 0 ;;
-        *) _usage ; exit 1 ;;
+        h) _usage0 ; exit 0 ;;
+        -) case $OPTARG in
+               help) _usage1 ;;
+               man) _usage2 ;;
+               version) echo "@PACKAGE_STRING@" ;;
+               *) echo "$0: illegal longopt -- $OPTARG" >&2
+                  _usage0
+                  exit 1
+                  ;;
+           esac
+           exit 0
+           ;;
+        *) _usage0 ; exit 1 ;;
     esac
 done
 shift $(($OPTIND - 1))
+
+if [[ -z "$@" ]];
+then
+    _usage0
+    exit 0
+fi
 
 for arg in "$@"
 do
@@ -114,15 +131,17 @@ rpmwhy - Why is a given package on my system?
 
 =head1 SYNOPSIS
 
-B<rpmwhy> [B<-q>|B<-v>] I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
+B<rpmwhy> [OPTION] I<PACKAGE>|I<FILE>|I<CAPABILITY> ...
 
-B<rpmwhy> B<-h>|B<-H>
+B<rpmwhy> B<--help>
 
 =head1 DESCRIPTION
 
 B<rpmwhy> is a wrapper around B<rpm -q --what{requires,recommends}>.
 
 =head1 OPTIONS
+
+=head2 General options
 
 =over 4
 
@@ -134,15 +153,33 @@ Quiet
 
 Verbose
 
+=back
+
+=head2 Information
+
+=over 4
+
 =item B<-h>
 
 Brief help
 
-=item B<-H>
+=item B<--help>
 
 Long help
 
+=item B<--man>
+
+Manpage
+
+=item B<--version>
+
+Display program version
+
 =back
+
+=head1 SEE ALSO
+
+L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>
 
 =cut
 
