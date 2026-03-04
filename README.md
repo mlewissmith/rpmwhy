@@ -1,6 +1,15 @@
-# rpmquerytools - Tools to query installed package RPMs
+# rpmquerytools
+Tools to query installed package RPMs
+
+```
+rpmwhy - Why is a given package on my system?
+rpmlsf - List contents of rpm packages
+```
+
+--------------------------------------------------------------------------------
 
 ## rpmwhy
+Why is a given package on my system?
 
 ```
 NAME
@@ -24,3 +33,6 @@ OPTIONS
 SEE ALSO
        rpm --test --erase PACKAGE
 ```
+
+## rpmlsf
+List contents of rpm packages

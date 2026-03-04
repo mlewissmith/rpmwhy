@@ -13,6 +13,7 @@ _package_url         = 'https://github.com/mlewissmith/rpmquerytools'
 _package_summary     = 'Tools to query installed package RPMs'
 _package_description = '''
 rpmwhy - Why is a given package on my system?
+rpmlsf - List contents of rpm packages
 '''
 
 ################################################################################
