@@ -2,6 +2,8 @@
 set -u
 
 VERBOSITY=1
+LOOKUP=true
+LOOKDOWN=true
 
 ANSI_RESET="\e[0m"
 ANSI_BOLD="\e[1m"
@@ -80,15 +82,15 @@ do
         v) ((VERBOSITY++)) ;;
         h) _usage0 ; exit 0 ;;
         -) case $OPTARG in
-               help) _usage1 ;;
-               man) _usage2 ;;
-               version) echo "@PACKAGE_STRING@" ;;
-               *) echo "$0: illegal longopt -- $OPTARG" >&2
-                  _usage0
-                  exit 1
-                  ;;
+               lookup) LOOKUP=true ;;
+               nolookup) LOOKUP=false ;;
+               lookdown) LOOKDOWN=true ;;
+               nolookdown) LOOKDOWN=false ;;
+               help) _usage1 ; exit 0 ;;
+               man) _usage2 ; exit 0 ;;
+               version) echo "@PACKAGE_STRING@" ; exit 0 ;;
+               *) echo "$0: illegal longopt -- $OPTARG" >&2 ; _usage0 ; exit 1 ;;
            esac
-           exit 0
            ;;
         *) _usage0 ; exit 1 ;;
     esac
@@ -104,17 +106,22 @@ fi
 for arg in "$@"
 do
     _rpmwhy $arg
-    for providedby in $(rpmq --whatprovides $arg)
+
+    $LOOKUP && for providedby in $(rpmq --whatprovides $arg)
     do
         [[ $? == 0 ]] || break
-        [[ $arg == $providedby ]] ||
+        if [[ $providedby != $arg ]]
+        then
             vecho "$arg provided-by $providedby"
-        for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
+            _rpmwhy $providedby
+        fi
+
+        $LOOKDOWN && for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
         do
-            [[ $providedby == $provided ]] ||
-               vecho "$providedby provides $provided"
-            [[ $provided == $arg ]] ||
-                _rpmwhy $provided
+            [[ $provided == $arg ]] && continue
+            [[ $provided == $providedby ]] && continue
+            vecho "$providedby provides $provided"
+            _rpmwhy $provided
         done
     done
 done
