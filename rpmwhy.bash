@@ -152,13 +152,24 @@ B<rpmwhy> is a wrapper around B<rpm -q --what{requires,recommends}>.
 
 =over 4
 
+=item B<--lookup> (default)
+
+=item B<--nolookup>
+
+Given I<CAPABILITY> on commandline, look up providing package.
+
+=item B<--lookdown> (default)
+
+=item B<--nolookdown>
+
+Search all packages referencing any provision of given I<PACKAGE>.
+B<--lookdown> requires B<--lookup>.
+
 =item B<-q>
 
-Quiet
+=item B<-v> (default)
 
-=item B<-v>
-
-Verbose
+Verbosity
 
 =back
 
