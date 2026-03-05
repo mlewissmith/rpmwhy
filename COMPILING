@@ -1,4 +1,4 @@
-# rpmquerytools
+[TODO]
 
 meson setup BUILDDIR --reconfigure --wipe
 meson configure -C BUILDDIR
