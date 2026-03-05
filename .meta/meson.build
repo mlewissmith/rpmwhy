@@ -7,8 +7,6 @@ __cp = find_program('cp')
 
 META_SRCFILES = [
   'README.md',
-  'COMPILING',
-  'HACKING',
 ]
 
 META_TGTFILES = []
