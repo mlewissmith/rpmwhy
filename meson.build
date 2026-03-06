@@ -4,7 +4,7 @@ project(
   'rpmquerytools',
   version: '1.1.1',
   default_options: [],
-  license: 'Unlicense',
+  license: 'Unlicense OR GPL-2.0-or-later',
   #license_files: 'LICENSE',
 )
 
@@ -13,7 +13,7 @@ _package_url         = 'https://github.com/mlewissmith/rpmquerytools'
 _package_summary     = 'Tools to query installed package RPMs'
 _package_description = '''
 rpmwhy - Why is a given package on my system?
-rpmlsf - List contents of rpm packages
+rpmlsf - List contents of rpm packages [GPL-2.0-or-later]
 '''
 
 ################################################################################
@@ -204,6 +204,16 @@ __rpmlsf = configure_file(
   install_dir   : configx.get('bindir'),
   install_mode  : 'rwxr-xr-x',
   install_tag   : 'bin',
+)
+
+install_data(
+  'rpmlsf.bash-completion',
+  rename      : fs.name(__rpmlsf),
+  install_dir : dependency('bash-completion',
+                           required : get_option('with-bash-completions'),
+                           disabler : true,
+                          ).get_variable('completionsdir'),
+  install_tag : 'bin',
 )
 
 

@@ -1,0 +1,65 @@
+# -*- shell-script -*-
+
+# THIS FILE BASED ON 'rpmls' completions from 'rpmdevtools-9.5'
+
+# bash completion for rpmdevtools
+# Requires bash-completion >= 20080705 (for _filedir)
+
+_rpmdev_uniqargs()
+{
+    local i j
+    for i in ${!COMPREPLY[@]}; do
+        for (( j=0; j < ${#COMP_WORDS[@]}; j++ )); do
+            if [[ $j -ne $COMP_CWORD && \
+                ${COMPREPLY[i]} == ${COMP_WORDS[j]} ]]; then
+                unset COMPREPLY[i]
+                break
+            fi
+        done
+    done
+}
+
+_rpmdev_installed_packages()
+{
+    if declare -F _rpm_installed_packages &>/dev/null ; then
+        _rpm_installed_packages
+    elif declare -F _xfunc &>/dev/null ; then
+        # bash-completion 1.90+ dynamic loading
+        _xfunc rpm _rpm_installed_packages
+    fi
+}
+
+_rpmdev_curprev()
+{
+    if declare -F _get_comp_words_by_ref &>/dev/null ; then
+        _get_comp_words_by_ref cur prev
+    else
+        cur=$1 prev=$2
+    fi
+}
+
+_rpmdev_rpmfiles()
+{
+    if [[ ${#@} -ne 0 ]] ; then # called directly as completion function
+        local cur prev ; _rpmdev_curprev "$2" "$3"
+    fi
+    _filedir '[rs]pm'
+    _rpmdev_uniqargs
+}
+
+_rpmlsf()
+{
+    COMPREPLY=()
+
+    local cur prev ; _rpmdev_curprev "$2" "$3"
+
+    if [[ "$cur" == -* ]] ; then
+        COMPREPLY=( $( compgen -W '-l' -- "$cur" ) )
+        _rpmdev_uniqargs
+        return
+    fi
+
+    [[ $cur != */* ]] && _rpmdev_installed_packages
+    _rpmdev_rpmfiles
+} &&
+complete -F _rpmlsf -o filenames rpmlsf
