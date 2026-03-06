@@ -75,17 +75,17 @@ function _rpmwhy {
     # done
 }
 
-while getopts qvhH-: opt
+while getopts pPcCqvhH-: opt
 do
     case $opt in
+	p) LOOKUP=true ;;
+	P) LOOKUP=false ;;
+	c) LOOKDOWN=true ;;
+	C) LOOKDOWN=false ;;
         q) VERBOSITY=0 ;;
         v) ((VERBOSITY++)) ;;
         h) _usage0 ; exit 0 ;;
         -) case $OPTARG in
-               lookup) LOOKUP=true ;;
-               nolookup) LOOKUP=false ;;
-               lookdown) LOOKDOWN=true ;;
-               nolookdown) LOOKDOWN=false ;;
                help) _usage1 ; exit 0 ;;
                man) _usage2 ; exit 0 ;;
                version) echo "@PACKAGE_STRING@" ; exit 0 ;;
@@ -152,18 +152,21 @@ B<rpmwhy> is a wrapper around B<rpm -q --what{requires,recommends}>.
 
 =over 4
 
-=item B<--lookup> (default)
+=item B<-p>
 
-=item B<--nolookup>
+Show details for providing parent package. I<default>
 
-Given I<CAPABILITY> on commandline, look up providing package.
+=item B<-P>
 
-=item B<--lookdown> (default)
+No details for providing parent package.
 
-=item B<--nolookdown>
+=item B<-c>
 
-Search all packages referencing any provision of given I<PACKAGE>.
-B<--lookdown> requires B<--lookup>.
+Show details for child capabilities of parent package. I<default>
+
+=item B<-C>
+
+No details for child capabilities of parent package. I<default>
 
 =item B<-q>
 
