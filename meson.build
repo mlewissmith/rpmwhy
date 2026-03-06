@@ -207,28 +207,58 @@ __rpmlsf = configure_file(
 )
 
 
+rpmquerytools_7 = custom_target(
+  input : configure_file(input:'rpmquerytools.pod', output:'rpmquerytools.pod', configuration:configx),
+  output : 'rpmquerytools.7',
+  command     : [
+    __pod2man,
+    '--section', '7',
+    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--release', configx.get('PACKAGE_NAME'),
+    '--date', configx.get('PACKAGE_VERSION'),
+    '@INPUT@',
+    '@OUTPUT@',
+  ],
+  install     : true,
+  install_dir : configx.get('mandir')/'man7',
+  install_tag : 'man',
+)
 
+################################################################################
 ## [DEBUG]
+
 rpmwhy_1_html = custom_target(
   input   : __rpmwhy,
   output  : fs.name(__rpmwhy) + '.1.html',
   command : [ 'pod2html', '--infile=./@INPUT@' ],
   capture : true,
-  install : false,
 )
 
-## [DEBUG]
 rpmwhy_1_ps = custom_target(
   input   : rpmwhy_1,
   output  : fs.name(rpmwhy_1.full_path()) + '.ps',
   command : [ 'man', '-t', './@INPUT@' ],
   capture : true,
-  install : false,
 )
 
-## [DEBUG]
+rpmquerytools_7_html = custom_target(
+  input   : 'rpmquerytools.pod',
+  output  : fs.name(rpmquerytools_7.full_path()) + '.html',
+  command : [ 'pod2html', '--infile=./@INPUT@' ],
+  capture : true,
+)
+
+rpmquerytools_7_ps = custom_target(
+  input   : rpmquerytools_7,
+  output  : fs.name(rpmquerytools_7.full_path()) + '.ps',
+  command : [ 'man', '-t', './@INPUT@' ],
+  capture : true,
+)
+
 alias_target(
   '.mandoc',
   rpmwhy_1_html,
   rpmwhy_1_ps,
+  rpmquerytools_7_html,
+  rpmquerytools_7_ps,
 )
