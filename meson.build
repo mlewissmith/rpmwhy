@@ -216,9 +216,14 @@ install_data(
   install_tag : 'bin',
 )
 
+rpmquerytools_pod = configure_file(
+  input         : 'rpmquerytools.pod',
+  output        : 'rpmquerytools.pod',
+  configuration : configx,
+)
 
 rpmquerytools_7 = custom_target(
-  input : configure_file(input:'rpmquerytools.pod', output:'rpmquerytools.pod', configuration:configx),
+  input : rpmquerytools_pod,
   output : 'rpmquerytools.7',
   command     : [
     __pod2man,
@@ -252,7 +257,7 @@ rpmwhy_1_ps = custom_target(
 )
 
 rpmquerytools_7_html = custom_target(
-  input   : 'rpmquerytools.pod',
+  input   : rpmquerytools_pod,
   output  : fs.name(rpmquerytools_7.full_path()) + '.html',
   command : [ 'pod2html', '--infile=./@INPUT@' ],
   capture : true,
