@@ -26,5 +26,5 @@
   [ ] 'meson.build' _package_summary
   [ ] 'meson.build' _package_description
   [ ] meson compile .meta
-  [ ] git changelog -x -t VERSION | git tag VERSION -F-
+  [ ] git changelog -x -n -t VERSION | git tag VERSION -F-
   [ ] Create github release ; generate release notes
