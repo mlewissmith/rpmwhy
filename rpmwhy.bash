@@ -31,9 +31,11 @@ ANSI_BRIGHTWHITE="\e[97m"
 
 EMPH=${ANSI_BOLD}${ANSI_GREEN}
 
-function _usage0 { pod2usage --verbose 0 $0; }
-function _usage1 { pod2usage --verbose 1 $0; }
-function _usage2 { pod2usage --verbose 2 $0; }
+function _usage { pod2usage --verbose 0 $0; exit ${1:-0}; }
+function _help { pod2usage --verbose 1 $0; exit ${1:-0}; }
+function _longhelp { pod2usage --verbose 2 $0; exit ${1:-0}; }
+function _version { echo "@PACKAGE_STRING@" ; exit ${1:-0}; }
+
 function vecho { [[ $VERBOSITY -ge 1 ]] && echo "$@"; }
 
 function rpmq { rpm --query --queryformat=${QF:-'%{NAME}\n'} --nodigest --nosignature "$@"; }
@@ -75,30 +77,25 @@ function _rpmwhy {
     # done
 }
 
-while getopts PCqh-: opt
+while getopts :PCqh-: opt
 do
     case $opt in
         P) LOOKUP=false ;;
         C) LOOKDOWN=false ;;
         q) VERBOSITY=0 ;;
-        h) _usage0 ; exit 0 ;;
+        h) _usage ;;
         -) case $OPTARG in
-               help) _usage1 ; exit 0 ;;
-               man) _usage2 ; exit 0 ;;
-               version) echo "@PACKAGE_STRING@" ; exit 0 ;;
-               *) echo "$0: illegal longopt -- $OPTARG" >&2 ; _usage0 ; exit 1 ;;
+               help) _help ;;
+               man) _longhelp ;;
+               version) _version ;;
+               *) _usage 1 ;;
            esac
            ;;
-        *) _usage0 ; exit 1 ;;
+        *) _usage 1 ;;
     esac
 done
 shift $(($OPTIND - 1))
-
-if [[ -z "$@" ]];
-then
-    _usage0
-    exit 0
-fi
+[[ -z "$@" ]] && _usage
 
 for arg in "$@"
 do
