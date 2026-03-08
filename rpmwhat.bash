@@ -8,12 +8,46 @@ function _version { echo "@PACKAGE_STRING@" ; exit ${1:-0}; }
 
 function rpmq {
     rpm --query --queryformat=${QF:-'%{NAME}\n'} \
-	--nodigest --nosignature "$@"
+        --nodigest --nosignature "$@"
 }
 
 function _rpmwhat {
     this=$1
     local IFS=$'\n'
+
+    # for filename in $(QF='[%{FILENAMES}\n]' rpmq $this)
+    # do
+    #     echo "$this contains $filename"
+    # done
+
+    # for provided in $(QF='[%{PROVIDES}\n]' rpmq $this)
+    # do
+    #     echo "$this provides $provided"
+    # done
+
+    for required in $(QF='[%{REQUIRES}\n]' rpmq $this)
+    do
+        echo -n "$this requires $required"
+        providedby=$(rpmq --whatprovides $required) &&
+            echo -n " provided-by $providedby"
+        echo
+    done
+
+    for recommended in $(QF='[%{RECOMMENDS}\n]' rpmq $this)
+    do
+        echo -n "$this recommends $recommended"
+        providedby=$(rpmq --whatprovides $recommended) &&
+            echo -n " provided-by $providedby"
+        echo
+    done
+
+    for suggested in $(QF='[%{SUGGESTS}\n]' rpmq $this)
+    do
+        echo -n "$this suggests $suggested"
+        providedby=$(rpmq --whatprovides $suggested) &&
+            echo -n " provided-by $providedby"
+        echo
+    done
 }
 
 while getopts :h-: opt
@@ -33,9 +67,13 @@ done
 shift $(($OPTIND - 1))
 [[ -z "$@" ]] && _usage
 
+oIFS="$IFS"
 for arg in "$@"
 do
-    _rpmwhat $arg
+    pkg=$(rpmq --whatprovides $arg)
+    [[ $? == 0 ]] || continue
+    echo "$arg provided-by $pkg"
+    _rpmwhat $pkg
 done
 
 ################################################################################
