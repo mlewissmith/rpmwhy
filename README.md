@@ -3,8 +3,11 @@
 Tools to query installed package RPMs
 
 ```
-rpmwhy - Why is a given package on my system?
-rpmlsf - List contents of rpm packages
+Provides tools:
+
+ * rpmwhy - Why are given packages on my system?
+ * rpmwhat - What are the dependencies of given packages?
+ * rpmlsf - List contents of rpm packages
 ```
 
 ## Manifest

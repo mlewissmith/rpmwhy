@@ -2,7 +2,7 @@
 
 project(
   'rpmquerytools',
-  version: '1.1.1',
+  version: '1.2.0',
   default_options: [],
   license: 'Unlicense',
   #license_files: 'LICENSE',
@@ -12,8 +12,11 @@ _package_bugreport   = 'https://github.com/mlewissmith/rpmquerytools/issues'
 _package_url         = 'https://github.com/mlewissmith/rpmquerytools'
 _package_summary     = 'Tools to query installed package RPMs'
 _package_description = '''
-rpmwhy - Why is a given package on my system?
-rpmlsf - List contents of rpm packages
+Provides tools:
+
+ * rpmwhy - Why are given packages on my system?
+ * rpmwhat - What are the dependencies of given packages?
+ * rpmlsf - List contents of rpm packages
 '''
 
 ################################################################################

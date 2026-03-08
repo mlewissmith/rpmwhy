@@ -128,7 +128,7 @@ exit
 
 =head1 NAME
 
-rpmwhy - Why is a given package on my system?
+rpmwhy - Why are given packages on my system?
 
 =head1 SYNOPSIS
 

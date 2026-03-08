@@ -84,7 +84,7 @@ exit
 
 =head1 NAME
 
-rpmwhat - TBD
+rpmwhat - What are a given package's dependencies?
 
 =head1 SYNOPSIS
 
