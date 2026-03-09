@@ -7,6 +7,7 @@
 ## by 'configuration_data()'
 
 option('with-manpages',         type:'feature', description:'install manpages')
+option('with-manformats',       type:'feature', description:'install manpages various formats')
 option('with-bash-completions', type:'feature', description:'install bash-completions')
 
 ################################################################################
