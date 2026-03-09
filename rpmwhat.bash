@@ -94,7 +94,8 @@ B<rpmwhat> B<-h>|B<--help>|B<--man>|B<--version>
 
 =head1 DESCRIPTION
 
-TBD
+B<rpmwhat>(1) lists the requirements of a given package, and the installed
+packages which provide those requirements.
 
 =head1 OPTIONS
 
