@@ -47,14 +47,14 @@ rpmlsf - List contents of rpm packages (long format)
 
 =head1 SYNOPSIS
 
-B<rpmlsf> [I<OPTIONS>] I<PACKAGENAME>|I<FILENAME>...
+B<rpmlsf> [I<OPTIONS>] I<PACKAGENAME>|I<FILENAME> ...
 
 B<rpmlsf> B<-h>|B<--help>|B<--man>|B<--version>
 
 =head1 DESCRIPTION
 
-B<rpmlsf>(1) lists the contents of the installed I<PACKAGENAME> or the rpm package
-file I<FILENAME>
+B<rpmlsf>(1) lists the contents of the installed rpm package I<PACKAGENAME> or
+the rpm package file I<FILENAME>
 
 =head1 OPTIONS
 
@@ -93,7 +93,12 @@ Set the internal separator character used to columnate output.
 
 =head1 SEE ALSO
 
-L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>
+L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>.
+
+B<rpmwhat>(1),
+B<rpmwhy>(1),
+B<rpmquerytools>(7),
+B<rpm>(8).
 
 =cut
 

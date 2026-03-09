@@ -132,14 +132,14 @@ rpmwhy - Why are given packages on my system?
 
 =head1 SYNOPSIS
 
-B<rpmwhy> [I<OPTION>] I<PACKAGENAME>|I<FILENAME>|I<CAPABILITY> ...
+B<rpmwhy> [I<OPTIONS>] I<PACKAGENAME>|I<FILENAME>|I<CAPABILITY> ...
 
 B<rpmwhy> B<-h>|B<--help>|B<--man>|B<--version>
 
 =head1 DESCRIPTION
 
-B<rpmwhy>(1) shows why a given I<PACKAGENAME>, I<FILENAME> or package I<CAPABILITY> is
-installed on the system.
+B<rpmwhy>(1) shows why a given I<PACKAGENAME>, I<FILENAME> or package
+I<CAPABILITY> is installed on the system.
 
 =over
 
@@ -208,9 +208,12 @@ Therefore it can be slow.
 
 =head1 SEE ALSO
 
-B<rpm>(8)
+L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>.
 
-L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>
+B<rpmlsf>(1),
+B<rpmwhat>(1),
+B<rpmquerytools>(7),
+B<rpm>(8).
 
 =cut
 

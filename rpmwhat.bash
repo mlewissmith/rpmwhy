@@ -88,7 +88,7 @@ rpmwhat - What are a given package's dependencies?
 
 =head1 SYNOPSIS
 
-B<rpmwhat> [I<OPTION>] I<PACKAGENAME>|I<FILENAME>|I<CAPABILITY> ...
+B<rpmwhat> [I<OPTIONS>] I<PACKAGENAME>|I<FILENAME>|I<CAPABILITY> ...
 
 B<rpmwhat> B<-h>|B<--help>|B<--man>|B<--version>
 
@@ -126,11 +126,9 @@ Display program version.
 
 L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>.
 
-B<rpmquerytools>(7),
 B<rpmlsf>(1),
-B<rpmwhat>(1),
-B<rpmwhy>(1).
-
+B<rpmwhy>(1),
+B<rpmquerytools>(7),
 B<rpm>(8).
 
 =cut
