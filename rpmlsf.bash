@@ -58,14 +58,6 @@ file I<FILENAME>
 
 =head1 OPTIONS
 
-=over
-
-=item B<-s> I<CHAR>
-
-I<Undocumented>
-
-=back
-
 =head2 Information options
 
 =over
@@ -87,6 +79,17 @@ Manpage.
 Display program version.
 
 =back
+
+=head2 Advanced options
+
+=over
+
+=item B<-s> I<CHAR>
+
+Set the internal separator character used to columnate output.
+
+=back
+
 
 =head1 SEE ALSO
 
