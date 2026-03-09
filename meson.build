@@ -272,15 +272,23 @@ rpmquerytools_7 = custom_target(
 ################################################################################
 ## [manformats]
 
+if get_option('with-manformats').allowed()
+
 __pod2html = find_program(
   'pod2html',
-  required : get_option('with-manformats'),
+  required : false,
   disabler : true,
 )
 
 __man = find_program(
   'man',
-  required : get_option('with-manformats'),
+  required : false,
+  disabler : true,
+)
+
+__ps2pdf = find_program(
+  'ps2pdf',
+  required : false,
   disabler : true,
 )
 
@@ -304,6 +312,15 @@ rpmwhy_1_ps = custom_target(
   install_tag : 'manformats',
 )
 
+rpmwhy_1_pdf = custom_target(
+  input   : rpmwhy_1_ps,
+  output  : fs.name(rpmwhy_1.full_path()) + '.pdf',
+  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install : true,
+  install_dir : configx.get('pdfdir'),
+  install_tag : 'manformats',
+)
+
 rpmwhat_1_html = custom_target(
   input   : rpmwhat,
   output  : fs.name(rpmwhat) + '.1.html',
@@ -321,6 +338,15 @@ rpmwhat_1_ps = custom_target(
   capture : true,
   install : true,
   install_dir : configx.get('htmldir'),
+  install_tag : 'manformats',
+)
+
+rpmwhat_1_pdf = custom_target(
+  input   : rpmwhat_1_ps,
+  output  : fs.name(rpmwhat_1.full_path()) + '.pdf',
+  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install : true,
+  install_dir : configx.get('pdfdir'),
   install_tag : 'manformats',
 )
 
@@ -344,3 +370,13 @@ rpmquerytools_7_ps = custom_target(
   install_tag : 'manformats',
 )
 
+rpmquerytools_7_pdf = custom_target(
+  input   : rpmquerytools_7_ps,
+  output  : fs.name(rpmquerytools_7.full_path()) + '.pdf',
+  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install : true,
+  install_dir : configx.get('pdfdir'),
+  install_tag : 'manformats',
+)
+
+endif #get_option('with-manformats').allowed()
