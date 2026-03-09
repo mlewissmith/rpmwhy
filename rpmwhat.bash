@@ -133,5 +133,4 @@ B<rpm>(8).
 
 =cut
 
-
 __DOCEND__
