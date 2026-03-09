@@ -1,0 +1,17 @@
+## -*- shell-script -*-
+## https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html
+## https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial
+
+# adapted from '/usr/share/bash-completion/completions/rpm'
+
+_rpmwhat_completions() {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    if [[ $cur == */* ]]
+    then
+        compopt -o filenames
+        COMPREPLY=( $(compgen -f -- "$cur") )
+    else
+        COMPREPLY=( $(rpm -qa --nodigest --nosignature --queryformat='%{NAME} ' "${cur}*" 2>/dev/null) )
+    fi
+} && complete -F _rpmwhat_completions rpmwhat

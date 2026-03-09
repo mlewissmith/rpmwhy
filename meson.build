@@ -178,9 +178,9 @@ rpmwhy_1 = custom_target(
   command     : [
     __pod2man,
     '--section', '1',
-    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--center',  configx.get('PACKAGE_SUMMARY'),
     '--release', configx.get('PACKAGE_NAME'),
-    '--date', configx.get('PACKAGE_VERSION'),
+    '--date',    configx.get('PACKAGE_VERSION'),
     '@INPUT@',
     '@OUTPUT@',
   ],
@@ -194,8 +194,7 @@ install_data(
   rename      : fs.name(rpmwhy),
   install_dir : dependency('bash-completion',
                            required : get_option('with-bash-completions'),
-                           disabler : true,
-                          ).get_variable('completionsdir'),
+                           disabler : true).get_variable('completionsdir'),
   install_tag : 'bin',
 )
 
@@ -215,15 +214,24 @@ rpmwhat_1 = custom_target(
   command     : [
     __pod2man,
     '--section', '1',
-    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--center',  configx.get('PACKAGE_SUMMARY'),
     '--release', configx.get('PACKAGE_NAME'),
-    '--date', configx.get('PACKAGE_VERSION'),
+    '--date',    configx.get('PACKAGE_VERSION'),
     '@INPUT@',
     '@OUTPUT@',
   ],
   install     : true,
   install_dir : configx.get('mandir')/'man1',
   install_tag : 'man',
+)
+
+install_data(
+  'rpmwhat.bash-completion',
+  rename      : fs.name(rpmwhat),
+  install_dir : dependency('bash-completion',
+                           required : get_option('with-bash-completions'),
+                           disabler : true).get_variable('completionsdir'),
+  install_tag : 'bin',
 )
 
 rpmlsf = configure_file(
@@ -242,9 +250,9 @@ rpmlsf_1 =  custom_target(
   command     : [
     __pod2man,
     '--section', '1',
-    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--center',  configx.get('PACKAGE_SUMMARY'),
     '--release', configx.get('PACKAGE_NAME'),
-    '--date', configx.get('PACKAGE_VERSION'),
+    '--date',    configx.get('PACKAGE_VERSION'),
     '@INPUT@',
     '@OUTPUT@',
   ],
@@ -259,8 +267,7 @@ install_data(
   rename      : fs.name(rpmlsf),
   install_dir : dependency('bash-completion',
                            required : get_option('with-bash-completions'),
-                           disabler : true,
-                          ).get_variable('completionsdir'),
+                           disabler : true).get_variable('completionsdir'),
   install_tag : 'bin',
 )
 
@@ -276,9 +283,9 @@ rpmquerytools_7 = custom_target(
   command     : [
     __pod2man,
     '--section', '7',
-    '--center', configx.get('PACKAGE_SUMMARY'),
+    '--center',  configx.get('PACKAGE_SUMMARY'),
     '--release', configx.get('PACKAGE_NAME'),
-    '--date', configx.get('PACKAGE_VERSION'),
+    '--date',    configx.get('PACKAGE_VERSION'),
     '@INPUT@',
     '@OUTPUT@',
   ],
@@ -312,120 +319,120 @@ __ps2pdf = find_program(
 
 ## rpmwhy
 rpmwhy_1_html = custom_target(
-  input   : rpmwhy,
-  output  : fs.name(rpmwhy) + '.1.html',
-  command : [ __pod2html, '--infile=./@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmwhy,
+  output      : fs.name(rpmwhy) + '.1.html',
+  command     : [ __pod2html, '--infile=./@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmwhy_1_ps = custom_target(
-  input   : rpmwhy_1,
-  output  : fs.name(rpmwhy_1.full_path()) + '.ps',
-  command : [ __man, '-t', './@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmwhy_1,
+  output      : fs.name(rpmwhy_1.full_path()) + '.ps',
+  command     : [ __man, '-t', './@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmwhy_1_pdf = custom_target(
-  input   : rpmwhy_1_ps,
-  output  : fs.name(rpmwhy_1.full_path()) + '.pdf',
-  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
-  install : true,
+  input       : rpmwhy_1_ps,
+  output      : fs.name(rpmwhy_1.full_path()) + '.pdf',
+  command     : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install     : true,
   install_dir : configx.get('pdfdir'),
   install_tag : 'manformats',
 )
 
 ## rpmwhat
 rpmwhat_1_html = custom_target(
-  input   : rpmwhat,
-  output  : fs.name(rpmwhat) + '.1.html',
-  command : [ __pod2html, '--infile=./@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmwhat,
+  output      : fs.name(rpmwhat) + '.1.html',
+  command     : [ __pod2html, '--infile=./@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmwhat_1_ps = custom_target(
-  input   : rpmwhat_1,
-  output  : fs.name(rpmwhat_1.full_path()) + '.ps',
-  command : [ __man, '-t', './@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmwhat_1,
+  output      : fs.name(rpmwhat_1.full_path()) + '.ps',
+  command     : [ __man, '-t', './@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmwhat_1_pdf = custom_target(
-  input   : rpmwhat_1_ps,
-  output  : fs.name(rpmwhat_1.full_path()) + '.pdf',
-  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
-  install : true,
+  input       : rpmwhat_1_ps,
+  output      : fs.name(rpmwhat_1.full_path()) + '.pdf',
+  command     : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install     : true,
   install_dir : configx.get('pdfdir'),
   install_tag : 'manformats',
 )
 
 ## rpmlsf
 rpmlsf_1_html = custom_target(
-  input   : rpmlsf,
-  output  : fs.name(rpmlsf) + '.1.html',
-  command : [ __pod2html, '--infile=./@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmlsf,
+  output      : fs.name(rpmlsf) + '.1.html',
+  command     : [ __pod2html, '--infile=./@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmlsf_1_ps = custom_target(
-  input   : rpmlsf_1,
-  output  : fs.name(rpmlsf_1.full_path()) + '.ps',
-  command : [ __man, '-t', './@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmlsf_1,
+  output      : fs.name(rpmlsf_1.full_path()) + '.ps',
+  command     : [ __man, '-t', './@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmlsf_1_pdf = custom_target(
-  input   : rpmlsf_1_ps,
-  output  : fs.name(rpmlsf_1.full_path()) + '.pdf',
-  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
-  install : true,
+  input       : rpmlsf_1_ps,
+  output      : fs.name(rpmlsf_1.full_path()) + '.pdf',
+  command     : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install     : true,
   install_dir : configx.get('pdfdir'),
   install_tag : 'manformats',
 )
 
 ## rpmquerytools
 rpmquerytools_7_html = custom_target(
-  input   : rpmquerytools_pod,
-  output  : fs.name(rpmquerytools_7.full_path()) + '.html',
-  command : [ __pod2html, '--infile=./@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmquerytools_pod,
+  output      : fs.name(rpmquerytools_7.full_path()) + '.html',
+  command     : [ __pod2html, '--infile=./@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmquerytools_7_ps = custom_target(
-  input   : rpmquerytools_7,
-  output  : fs.name(rpmquerytools_7.full_path()) + '.ps',
-  command : [ __man, '-t', './@INPUT@' ],
-  capture : true,
-  install : true,
+  input       : rpmquerytools_7,
+  output      : fs.name(rpmquerytools_7.full_path()) + '.ps',
+  command     : [ __man, '-t', './@INPUT@' ],
+  capture     : true,
+  install     : true,
   install_dir : configx.get('htmldir'),
   install_tag : 'manformats',
 )
 
 rpmquerytools_7_pdf = custom_target(
-  input   : rpmquerytools_7_ps,
-  output  : fs.name(rpmquerytools_7.full_path()) + '.pdf',
-  command : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
-  install : true,
+  input       : rpmquerytools_7_ps,
+  output      : fs.name(rpmquerytools_7.full_path()) + '.pdf',
+  command     : [ __ps2pdf, '@INPUT@', '@OUTPUT@' ],
+  install     : true,
   install_dir : configx.get('pdfdir'),
   install_tag : 'manformats',
 )
