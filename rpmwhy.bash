@@ -2,6 +2,7 @@
 set -u
 
 VERBOSITY=2
+DEBUG=false
 
 ANSI_RESET="\e[0m"
 ANSI_BOLD="\e[1m"
@@ -34,6 +35,7 @@ c000=${ANSI_RESET}
 
 ################################################################################
 
+function echoerr { >&2 echo "$@"; }
 function _usage { pod2usage --verbose 0 $0; exit ${1:-0}; }
 function _help { pod2usage --verbose 1 $0; exit ${1:-0}; }
 function _longhelp { pod2usage --verbose 2 $0; exit ${1:-0}; }
@@ -83,16 +85,19 @@ function _rpmwhy {
             [[ $? == 0 ]] || break
             echo -e "$this enhances ${cDEP}${enhances}${c000}"
         done
+
+    return 0
 }
 
 ################################################################################
 
-while getopts :V:vqh-: opt
+while getopts :V:vqDh-: opt
 do
     case $opt in
         V) VERBOSITY=$OPTARG ;;
         v) (( VERBOSITY++ )) ;;
         q) (( VERBOSITY-- )) ;;
+        D) DEBUG=true ;;
         h) _usage ;;
         -) case $OPTARG in
                help) _help ;;
@@ -110,10 +115,10 @@ shift $(($OPTIND - 1))
 
 for arg in "$@"
 do
+    IFS=$'\n'
     for providedby in $(rpmq --whatprovides $arg)
     do
-        [[ $? == 0 ]] ||
-            break
+        [[ $? != 0 ]] && echoerr "$providedby" && break;
 
         this="${cCAP}${arg}${c000}"
         that="${cPKG}${providedby}${c000}"
@@ -127,8 +132,7 @@ do
 
         for provided in $(QF="[%{PROVIDES}\n]" rpmq $providedby)
         do
-            [[ $provided == $arg ]] &&
-                continue
+            [[ $provided == $arg ]] && continue
             [[ $provided == $providedby ]] ||
                 _rpmwhy $provided $providedby
         done
