@@ -2,7 +2,6 @@
 set -u
 
 VERBOSITY=2
-DEBUG=false
 
 ################################################################################
 
@@ -122,15 +121,14 @@ do
         V) VERBOSITY=$OPTARG ;;
         v) (( VERBOSITY++ )) ;;
         q) (( VERBOSITY-- )) ;;
-        D) DEBUG=true ;;
         h) _usage ;;
         -) case $OPTARG in
                help) _help ;;
                man) _longhelp ;;
                version) _version ;;
-	       colour|color) _init_colour 1 ;;
-	       no-color|no-colour) _init_colour 0 ;;
-	       nocolor|nocolour) _init_colour 0 ;;
+               colour|color) _init_colour 1 ;;
+               nocolor|nocolour) _init_colour 0 ;;
+               no-color|no-colour) _init_colour 0 ;;
                *) _usage 1 ;;
            esac
            ;;
@@ -180,13 +178,13 @@ rpmwhy - list dependents of rpm packages
 
 =head1 SYNOPSIS
 
-B<rpmwhy> [I<OPTIONS>] I<PACKAGENAME>|I<FILENAME>|I<CAPABILITY> ...
+B<rpmwhy> [ I<OPTIONS> ] I<PACKAGENAME> | I<FILENAME> | I<CAPABILITY> ...
 
-B<rpmwhy> B<-h>|B<--help>|B<--man>|B<--version>
+B<rpmwhy> B<-h> | B<--help> | B<--man> | B<--version>
 
 =head1 DESCRIPTION
 
-B<rpmwhy>(1) lists the dependent packages of a given I<PACKAGENAME>, or the
+L<rpmwhy(1)> lists the dependent packages of a given I<PACKAGENAME>, or the
 dependent packages of the package owning a given I<FILENAME> or I<CAPABILITY>.
 
 =head1 OPTIONS
@@ -195,33 +193,28 @@ dependent packages of the package owning a given I<FILENAME> or I<CAPABILITY>.
 
 =over
 
-=item B<-V> I<NUM>
+=item B<-V1>
 
-Set verbosity to I<NUM>.
+Show packages C<required-by> I<PACKAGENAME>.
 
-=over
+=item B<-V2>
 
-=item B<1>
+Also show packages C<recommended-by> I<PACKAGENAME>.
+[I<default>]
 
-C<required-by>
+=item B<-V3>
 
-=item B<2>
+Also show packages C<suggested-by> I<PACKAGENAME>.
 
-C<recommended-by> [B<default>]
+=item B<-V4>
 
-=item B<3>
+Also show packages I<PACKAGENAME> C<supplements>.
+[I<experimental>]
 
-C<suggested-by>
+=item B<-V5>
 
-=item B<4>
-
-C<supplements> [I<experimental>]
-
-=item B<5>
-
-C<enhances> [I<experimental>]
-
-=back
+Also show packages I<PACKAGENAME> C<enhances>.
+[I<experimental>]
 
 =item B<-v>
 
@@ -230,6 +223,18 @@ Increment verbosity, may be repeated.
 =item B<-q>
 
 Decrement verbosity, may be repeated.
+
+=back
+
+=head2 Colour options
+
+Output is colourised by default if C<STDOUT> is connected to a terminal.
+
+=over
+
+=item B<-->[B<no>]B<colo>[B<u>]B<r>
+
+Control colourised output.
 
 =back
 
@@ -255,14 +260,24 @@ Display program version.
 
 =back
 
+=head1 ENVIRONMENT
+
+=over
+
+=item B<NO_COLOR>
+
+Disable colour output if set to any value, including C<null>.
+
+=back
+
 =head1 SEE ALSO
 
 L<< B<@PACKAGE_NAME@>|@PACKAGE_URL@ >>.
 
-B<rpmlsf>(1),
-B<rpmwhat>(1),
-B<rpmquerytools>(7),
-B<rpm>(8).
+L<rpmlsf(1)>,
+L<rpmwhat(1)>,
+L<rpmquerytools(7)>,
+L<rpm(8)>.
 
 =cut
 
