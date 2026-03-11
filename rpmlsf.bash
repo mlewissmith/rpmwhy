@@ -1,16 +1,19 @@
 #!/bin/bash
 set -u
 
-s=^
+VERBOSITY=1
 
 function _usage { pod2usage --verbose 0 $0; exit ${1:-0}; }
 function _help { pod2usage --verbose 1 $0; exit ${1:-0}; }
 function _longhelp { pod2usage --verbose 2 $0; exit ${1:-0}; }
 function _version { echo "@PACKAGE_STRING@" ; exit ${1:-0}; }
 
-while getopts :s:h-: opt
+while getopts :V:vqs:h-: opt
 do
     case $opt in
+        V) VERBOSITY=$OPTARG ;;
+        v) (( VERBOSITY++ )) ;;
+        q) (( VERBOSITY-- )) ;;
         s) s=$OPTARG ;;
         h) _usage ;;
         -) case $OPTARG in
@@ -26,13 +29,26 @@ done
 shift $((OPTIND - 1))
 [[ -z "$@" ]] && _usage
 
+
+_t=$'\t'
+_n=$'\n'
+queryformat="[%{fileflags:fflags}${_t}%{filemodes:perms}${_t}%{fileusername}${_t}%{filegroupname}${_t}%{filenames}${_n}]"
+
 for arg in "$@"
 do
     p=
     [[ $arg == */* ]] && p=p
-    rpm -q$p \
-        --queryformat="[%{fileflags:fflags}$s%{filemodes:perms}$s%{fileusername}$s%{filegroupname}$s%{filenames}\n]" \
-        --nodigest --nosignature "$arg" | column -s$s -t
+    if [[ $VERBOSITY -ge 1 ]]
+    then rpm -q$p \
+             --nodigest --nosignature \
+             --queryformat="${queryformat}" \
+             "$arg" | column -s"${_t}" -o' ' -t
+    fi
+    if [[ $VERBOSITY -ge 2 ]]
+    then
+        echo
+        rpm -q$p "$arg" --provides | column -t -o' '
+    fi
 done
 
 ################################################################################
@@ -58,6 +74,38 @@ the rpm package file I<FILENAME>
 
 =head1 OPTIONS
 
+=head2 Verbosity options
+
+=over
+
+=item B<-V1>
+
+   [TBD]
+
+=item B<-V2>
+
+   [TBD]
+
+=item B<-v>
+
+Increment verbosity, may be repeated.
+
+=item B<-q>
+
+Decrement verbosity, may be repeated.
+
+=back
+
+=head2 Advanced options
+
+=over
+
+=item B<-s> I<CHAR>
+
+Set the internal separator character used to columnate output.
+
+=back
+
 =head2 Information options
 
 =over
@@ -79,17 +127,6 @@ Manpage.
 Display program version.
 
 =back
-
-=head2 Advanced options
-
-=over
-
-=item B<-s> I<CHAR>
-
-Set the internal separator character used to columnate output.
-
-=back
-
 
 =head1 SEE ALSO
 
