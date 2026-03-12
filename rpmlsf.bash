@@ -8,7 +8,7 @@ function _help { pod2usage --verbose 1 $0; exit ${1:-0}; }
 function _longhelp { pod2usage --verbose 2 $0; exit ${1:-0}; }
 function _version { echo "@PACKAGE_STRING@" ; exit ${1:-0}; }
 
-while getopts :V:vq:h-: opt
+while getopts :V:vqh-: opt
 do
     case $opt in
         V) VERBOSITY=$OPTARG ;;
