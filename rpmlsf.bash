@@ -8,13 +8,12 @@ function _help { pod2usage --verbose 1 $0; exit ${1:-0}; }
 function _longhelp { pod2usage --verbose 2 $0; exit ${1:-0}; }
 function _version { echo "@PACKAGE_STRING@" ; exit ${1:-0}; }
 
-while getopts :V:vqs:h-: opt
+while getopts :V:vq:h-: opt
 do
     case $opt in
         V) VERBOSITY=$OPTARG ;;
         v) (( VERBOSITY++ )) ;;
         q) (( VERBOSITY-- )) ;;
-        s) s=$OPTARG ;;
         h) _usage ;;
         -) case $OPTARG in
                help) _help ;;
@@ -70,7 +69,7 @@ B<rpmlsf> B<-h>|B<--help>|B<--man>|B<--version>
 =head1 DESCRIPTION
 
 B<rpmlsf>(1) lists the contents of the installed rpm package I<PACKAGENAME> or
-the rpm package file I<FILENAME>
+the local (s)rpm package file I<FILENAME>.
 
 =head1 OPTIONS
 
@@ -80,11 +79,11 @@ the rpm package file I<FILENAME>
 
 =item B<-V1>
 
-   [TBD]
+Display only I<PACKAGENAME> file contents. B<(default)>
 
 =item B<-V2>
 
-   [TBD]
+Also display I<PACKAGENAME> provided capabilities.
 
 =item B<-v>
 
@@ -93,16 +92,6 @@ Increment verbosity, may be repeated.
 =item B<-q>
 
 Decrement verbosity, may be repeated.
-
-=back
-
-=head2 Advanced options
-
-=over
-
-=item B<-s> I<CHAR>
-
-Set the internal separator character used to columnate output.
 
 =back
 
