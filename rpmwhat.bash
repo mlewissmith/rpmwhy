@@ -179,26 +179,26 @@ package dependencies of the package owning a given I<FILENAME> or I<CAPABILITY>.
 
 =item B<-V1>
 
-Show packages I<PACKAGENAME> C<requires>.
+Only display packages I<PACKAGENAME> C<requires>.
 
 =item B<-V2>
 
-Also show packages I<PACKAGENAME> C<recommends>.
-[I<default>]
+Also display packages I<PACKAGENAME> C<recommends>.
+B<(default)>
 
 =item B<-V3>
 
-Also show packages I<PACKAGENAME> C<suggests>.
+Also display packages I<PACKAGENAME> C<suggests>.
 
 =item B<-V4>
 
-Also show packages C<supplemented-by> I<PACKAGENAME>.
-[I<experimental>]
+Also display  packages C<supplemented-by> I<PACKAGENAME>.
+I<(experimental)>
 
 =item B<-V5>
 
-Also show packages C<enhanced-by> I<PACKAGENAME>.
-[I<experimental>]
+Also display packages C<enhanced-by> I<PACKAGENAME>.
+I<(experimental)>
 
 =item B<-v>
 

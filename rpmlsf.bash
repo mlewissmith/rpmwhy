@@ -79,7 +79,8 @@ the local (s)rpm package file I<FILENAME>.
 
 =item B<-V1>
 
-Display only I<PACKAGENAME> file contents. B<(default)>
+Display only I<PACKAGENAME> file contents.
+B<(default)>
 
 =item B<-V2>
 
