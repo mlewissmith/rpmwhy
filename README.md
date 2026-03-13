@@ -10,6 +10,37 @@ Provides tools:
     rpmwhy - list dependents of rpm packages
 ```
 
+## Obtaining
+
+The latest release of **rpmquerytools** can be downloaded from
+[github](https://github.com/mlewissmith/rpmquerytools/releases)
+or cloned with
+```
+git clone https://github.com/mlewissmith/rpmquerytools
+```
+
+## Compiling
+
+**rpmquerytools** uses the
+[meson](https://mesonbuild.com)
+build system to configure, compile and install.
+```
+meson setup BUILDDIR
+meson compile -C BUILDDIR
+meson install -C BUILDDIR
+```
+
+> [!TIP]
+> * List all available build options with
+>   `meson configure BUILDDIR`
+> * Set build options with
+>   `meson configure BUILDDIR -D OPTION=VALUE ...`
+> * Influential build options include 
+>   - `prefix`
+>   - `with-bash-completions`
+>   - `with-manpages`
+>   - `with-manformats`
+
 ## Manifest
 
 ### rpmlsf
@@ -29,7 +60,7 @@ DESCRIPTION
 
 OPTIONS
   Verbosity options
-    -V1 Display only *PACKAGENAME* file contents. (default)
+    -V1 Only display *PACKAGENAME* file contents. (default)
 
     -V2 Also display *PACKAGENAME* provided capabilities.
 
@@ -73,15 +104,16 @@ DESCRIPTION
 
 OPTIONS
   Verbosity options
-    -V1 Show packages *PACKAGENAME* "requires".
+    -V1 Only display packages *PACKAGENAME* "requires".
 
-    -V2 Also show packages *PACKAGENAME* "recommends". [*default*]
+    -V2 Also display packages *PACKAGENAME* "recommends". (default)
 
-    -V3 Also show packages *PACKAGENAME* "suggests".
+    -V3 Also display packages *PACKAGENAME* "suggests".
 
-    -V4 Also show packages "supplemented-by" *PACKAGENAME*. [*experimental*]
+    -V4 Also display packages "supplemented-by" *PACKAGENAME*.
+        *(experimental)*
 
-    -V5 Also show packages "enhanced-by" *PACKAGENAME*. [*experimental*]
+    -V5 Also display packages "enhanced-by" *PACKAGENAME*. *(experimental)*
 
     -v  Increment verbosity, may be repeated.
 
@@ -133,15 +165,15 @@ DESCRIPTION
 
 OPTIONS
   Verbosity options
-    -V1 Show packages "required-by" *PACKAGENAME*.
+    -V1 Only display packages "required-by" *PACKAGENAME*.
 
-    -V2 Also show packages "recommended-by" *PACKAGENAME*. [*default*]
+    -V2 Also display packages "recommended-by" *PACKAGENAME*. (default)
 
-    -V3 Also show packages "suggested-by" *PACKAGENAME*.
+    -V3 Also display packages "suggested-by" *PACKAGENAME*.
 
-    -V4 Also show packages *PACKAGENAME* "supplements". [*experimental*]
+    -V4 Also display packages *PACKAGENAME* "supplements". *(experimental)*
 
-    -V5 Also show packages *PACKAGENAME* "enhances". [*experimental*]
+    -V5 Also display packages *PACKAGENAME* "enhances". *(experimental)*
 
     -v  Increment verbosity, may be repeated.
 
