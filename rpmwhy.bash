@@ -72,21 +72,21 @@ function _rpmwhy {
     local this="${cPKG}${package}${c000} provides ${cCAP}${capability}${c000}"
     local IFS=$'\n'
 
-    [[ $VERBOSITY -gt 0 ]] &&
+    [[ $VERBOSITY -ge 1 ]] &&
         for requiredby in $(rpmq --whatrequires $capability)
         do
             [[ $? == 0 ]] || break
             echo -e "$this required-by ${cDEP}${requiredby}${c000}"
         done
 
-    [[ $VERBOSITY -gt 1 ]] &&
+    [[ $VERBOSITY -ge 2 ]] &&
         for recommendedby in $(rpmq --whatrecommends $capability)
         do
             [[ $? == 0 ]] || break
             echo -e "$this recommended-by ${cDEP}${recommendedby}${c000}"
         done
 
-    [[ $VERBOSITY -gt 2 ]] &&
+    [[ $VERBOSITY -ge 3 ]] &&
         for suggestedby in $(rpmq --whatsuggests $capability)
         do
             [[ $? == 0 ]] || break
@@ -94,7 +94,7 @@ function _rpmwhy {
         done
 
     # supplements <=> reverse recommends
-    [[ $VERBOSITY -gt 3 ]] &&
+    [[ $VERBOSITY -ge 4 ]] &&
         for supplements in $(QF="[%{SUPPLEMENTS}\n]" rpmq $capability)
         do
             [[ $? == 0 ]] || break
@@ -102,7 +102,7 @@ function _rpmwhy {
         done
 
     # enhances <=> reverse suggests
-    [[ $VERBOSITY -gt 4 ]] &&
+    [[ $VERBOSITY -ge 5 ]] &&
         for enhances in $(QF="[%{ENHANCES}\n]" rpmq $capability)
         do
             [[ $? == 0 ]] || break
