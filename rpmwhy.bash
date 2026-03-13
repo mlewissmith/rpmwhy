@@ -93,16 +93,18 @@ function _rpmwhy {
             echo -e "$this suggested-by ${cDEP}${suggestedby}${c000}"
         done
 
-    # supplements <=> reverse recommends
-    [[ $VERBOSITY -ge 4 ]] &&
+    # THIS supplements THAT <=> THAT recommends THIS
+    # only relevent for packages, not capabilities
+    [[ $VERBOSITY -ge 4 && $capability == $package ]] &&
         for supplements in $(QF="[%{SUPPLEMENTS}\n]" rpmq $capability)
         do
             [[ $? == 0 ]] || break
             echo -e "$this supplements ${cDEP}${supplements}${c000}"
         done
 
-    # enhances <=> reverse suggests
-    [[ $VERBOSITY -ge 5 ]] &&
+    # THIS enhances THAT <=> THAT suggests THIS
+    # only relevent for packages, not capabilities
+    [[ $VERBOSITY -ge 5 && $capability == $package ]] &&
         for enhances in $(QF="[%{ENHANCES}\n]" rpmq $capability)
         do
             [[ $? == 0 ]] || break
